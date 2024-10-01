@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="login">
+    <i class="fas fa-user fa-5x"></i>
+    <h2>Já tem conta?</h2>
+    <p>Faça login agora</p>
+    <a href="login">
+      <button><i class="fas fa-arrow-circle-right"></i> Logar</button>
+    </a>
+  </div>
+
+  <div class="register">
+    <h1>Cadastro</h1>
+    <form (ngSubmit)="register()" #registerForm="ngForm" novalidate>
+      <input
+        type="text"
+        placeholder="Usuário"
+        [(ngModel)]="username"
+        name="username"
+        (blur)="checkUsername()"
+        #usernameInput="ngModel"
+        required
+      />
+      <div *ngIf="usernameExists" class="error">
+        Nome de usuário já existe.
+      </div>
+      <div *ngIf="usernameInput.invalid && usernameInput.touched && !usernameExists" class="error">
+        Usuário é obrigatório.
+      </div>
+
+      <input
+        type="email"
+        placeholder="Email"
+        [(ngModel)]="email"
+        name="email"
+        (blur)="checkEmail()"
+        #emailInput="ngModel"
+        required
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+      />
+      <div *ngIf="emailExists" class="error">
+        Email já está em uso.
+      </div>
+      <div *ngIf="emailInput.invalid && emailInput.touched && !emailExists" class="error">
+        Email inválido ou vazio.
+      </div>
+
+      <input
+        type="password"
+        placeholder="Senha"
+        [(ngModel)]="password"
+        name="password"
+        #passwordInput="ngModel"
+        required
+      />
+      <div *ngIf="passwordInput.invalid && passwordInput.touched" class="error">
+        Senha é obrigatória.
+      </div>
+
+      <input
+        type="password"
+        placeholder="Repita a senha"
+        [(ngModel)]="confirmPassword"
+        name="confirmPassword"
+        #confirmPasswordInput="ngModel"
+        required
+        [pattern]="password"
+      />
+      <div *ngIf="confirmPasswordInput.invalid && confirmPasswordInput.touched" class="error">
+        As senhas devem coincidir.
+      </div>
+
+      <button type="submit" [disabled]="registerForm.invalid">
+        Cadastrar-se
+      </button>
+    </form>
+
+    <p class="separator">&copy; 2024 Taskify</p>
+  </div>
+</div>

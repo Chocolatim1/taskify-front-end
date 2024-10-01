@@ -1,0 +1,234 @@
+<div class="dashboard-container">
+  <h1>Dashboard</h1>
+
+  <div class="example-button-container">
+    <button mat-fab extended class="button-rounded" (click)="toggleForm()">
+      <span class="material-symbols-outlined">add</span>
+      Cadastrar Tarefa
+    </button>
+    <button mat-fab extended class="button-rounded" (click)="toggleList()">
+      <span class="material-symbols-outlined">post_add</span>
+      Listagem de Tarefas
+    </button>
+    <button mat-fab extended class="button-rounded" (click)="toggleResponsavelForm()">
+      <span class="material-symbols-outlined">person_add</span>
+      Cadastrar Responsável
+    </button>
+  </div>  
+
+  <div *ngIf="showForm" class="task-form">
+    <h2>Cadastrar Tarefa</h2>
+    <form (ngSubmit)="onSubmit()">
+      <input
+        type="text"
+        placeholder="Título"
+        maxlength="50"
+        [(ngModel)]="task.title"
+        name="title"
+        required
+      />
+      <textarea
+        placeholder="Descrição"
+        [(ngModel)]="task.description"
+        name="description"
+        maxlength="300"
+        required
+      ></textarea>
+
+      <div class="form-row">
+        <select [(ngModel)]="task.responsible" name="responsible" required>
+          <option value="" disabled>Responsável</option>
+          <option *ngFor="let responsavel of responsaveis" [value]="responsavel.idResponsaveis">
+            {{ responsavel.nome }}
+          </option>
+        </select>
+        
+        <select
+          class="margin-left"
+          [(ngModel)]="task.priority"
+          name="priority"
+          required
+        >
+          <option value="" disabled selected>Prioridade</option>
+          <option value="baixa">Baixa</option>
+          <option value="media">Média</option>
+          <option value="alta">Alta</option>
+        </select>
+      </div>
+
+      <input type="date" [(ngModel)]="task.deadline" name="deadline" required />
+
+      <div class="button-container">
+        <button type="submit" class="task-form-button">Cadastrar</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="showList" class="task-list">
+    <h2>Listagem de Tarefas</h2>
+    <div class="search-container">
+      <div class="search-row">
+        <mat-form-field appearance="fill" [floatLabel]="'auto'">
+          <mat-label>Número</mat-label>
+          <input
+            matInput
+            placeholder="Digite o número"
+            [(ngModel)]="searchNumber"
+            name="searchNumber"
+          />
+        </mat-form-field>
+      </div>
+      <div class="search-row">
+        <mat-form-field [floatLabel]="'auto'">
+          <mat-label>Título/Descrição</mat-label>
+          <input
+            matInput
+            placeholder="Digite o título ou descrição"
+            [(ngModel)]="searchTitleDescription"
+            name="searchTitleDescription"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="search-row">
+        <mat-form-field [hideRequiredMarker]="true" floatLabel="always">
+          <mat-select
+            [(ngModel)]="selectedResponsavel"
+            name="responsavel"
+            required
+          >
+            <mat-option value="">Select</mat-option>
+            <mat-option
+              *ngFor="let responsavel of responsaveis"
+              [value]="responsavel.idResponsaveis"
+            >
+              {{ responsavel.nome }}
+            </mat-option>
+          </mat-select>
+          <mat-label>Responsável</mat-label>
+        </mat-form-field>
+
+        <mat-form-field
+          [hideRequiredMarker]="true"
+          floatLabel="always"
+          class="margin-left"
+        >
+          <mat-select [(ngModel)]="selectedSituacao" name="situacao">
+            <mat-option value="">Select</mat-option>
+            <mat-option value="Em andamento">Em andamento</mat-option>
+            <mat-option value="concluida">Concluída</mat-option>
+          </mat-select>
+          <mat-label>Situação</mat-label>
+        </mat-form-field>
+
+        <div class="search-button-container">
+          <button mat-raised-button color="primary" (click)="searchTasks()">
+            Buscar Tarefas
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Título</th>
+            <th>Responsável</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tarefa of tarefas">
+            <td>{{ tarefa.numero }}</td>
+            <td>{{ tarefa.titulo }}</td>
+            <td>{{ getResponsavelNome(tarefa.responsavelId) }}</td>
+            <td>
+              <a
+                href="#"
+                (click)="editarTarefa(tarefa); $event.preventDefault()"
+                >Editar</a
+              >
+              |
+              <a
+                href="#"
+                *ngIf="userId !== null"
+                (click)="
+                  deletarTarefa(userId!, tarefa.idTarefa);
+                  $event.preventDefault()
+                "
+              >
+                Excluir
+              </a>
+
+              |
+              <a
+                href="#"
+                *ngIf="userId !== null"
+                (click)="
+                  concluirTarefa(userId!, tarefa.idTarefa);
+                  $event.preventDefault()
+                "
+              >
+                Concluir
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="showResponsavelForm" class="responsavel-section">
+    <div class="responsavel-form">
+      <h2>Cadastrar Responsável</h2>
+      <form (ngSubmit)="onSubmitResponsavel()">
+        <input
+          type="text"
+          placeholder="Nome do Responsável"
+          [(ngModel)]="responsavelNome"
+          name="responsavelNome"
+          required
+          class="form-input"
+        />
+        <div class="button-container">
+          <button class="button-64" type="submit">
+            <span class="text">Cadastrar</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <mat-expansion-panel
+      [expanded]="panelOpenState"
+      (opened)="onPanelOpened()"
+      (closed)="onPanelClosed()"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>Listagem de Responsáveis</mat-panel-title>
+        <mat-panel-description> Clique para expandir </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="responsaveis-list">
+        <ul>
+          <li *ngFor="let responsavel of responsaveis">
+            {{ responsavel.nome }}
+            <div class="example-button-container" style="display: inline">
+              <button
+                mat-icon-button
+                aria-label="Delete"
+                (click)="deleteResponsavel(responsavel.idResponsaveis)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </mat-expansion-panel>
+  </div>
+
+  <div class="logout-icon" (click)="logout()">
+    <span class="material-symbols-outlined">exit_to_app</span>
+  </div>
+</div>

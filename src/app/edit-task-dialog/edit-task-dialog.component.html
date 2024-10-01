@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Editar Tarefa</h2>
+
+<mat-dialog-content>
+  <p>Por favor, edite os detalhes da tarefa:</p>
+  
+  <mat-form-field appearance="fill">
+    <mat-label>Título</mat-label>
+    <input matInput [(ngModel)]="data.titulo" placeholder="Insira o título" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Descrição</mat-label>
+    <textarea matInput [(ngModel)]="data.descricao" placeholder="Insira a descrição"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Situação</mat-label>
+    <mat-select [(ngModel)]="data.situacao">
+      <mat-option *ngFor="let situacao of situacoes" [value]="situacao.value">
+        {{ situacao.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancelar</button>
+  <button mat-button (click)="onOkClick()" cdkFocusInitial>Ok</button>
+</mat-dialog-actions>

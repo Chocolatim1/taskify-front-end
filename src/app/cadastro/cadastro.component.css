@@ -1,0 +1,188 @@
+body {
+  background: #e9ebee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
+  transition: transform 0.6s ease-in-out;
+}
+
+.login {
+  background-image: linear-gradient(135deg, #23212f 5%, #9526a9 95%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  border-radius: 10px 0 0 10px;
+  text-align: center;
+  background-color: #ed0101;
+  height: 100%;
+}
+
+.register {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fafafa;
+  border-radius: 0 10px 10px 0;
+  text-align: center;
+  overflow: auto;
+  height: 100%;
+  color: #000;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.separator::before,
+.separator::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #000;
+}
+
+.separator:not(:empty)::before {
+  margin-right: 10px;
+}
+
+.separator:not(:empty)::after {
+  margin-left: 10px;
+}
+
+.login,
+.register {
+  padding: 100px 50px;
+}
+
+.login h1,
+.register h2 {
+  margin-bottom: 40px;
+  font-size: 2.5em;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 30px;
+  border: none;
+  background-color: #eeeeef;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s all ease-in-out;
+}
+
+.register button {
+  width: 100%;
+  margin: 30px 0;
+  padding: 10px;
+  border: none;
+  background-color: #9526a9;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.3s all ease-in-out;
+}
+
+.register button:hover {
+  width: 97%;
+  font-size: 22px;
+  border-radius: 5px;
+}
+
+.login h2 {
+  font-size: 50px;
+  letter-spacing: 3px;
+}
+
+.login p {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.login input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: none;
+}
+
+.login button {
+  background-color: transparent;
+  border: 1px solid #fff;
+  border-radius: 20px;
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 20px;
+  text-transform: uppercase;
+  transition: 0.2s all ease-in-out;
+}
+
+.login button:hover,
+.register button:hover {
+  opacity: 0.8;
+}
+
+.login button:hover {
+  color: #9526a9;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: -82px;
+  margin-bottom: 10px;
+  display: block;
+  position: absolute;
+}
+
+.form-group {
+  margin-bottom: 30px;
+  position: relative;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 0;
+}
+
+input.ng-invalid.ng-touched {
+  border-color: red;
+}
+
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .login,
+  .register {
+    width: 100%;
+    border-radius: 10px;
+  }
+}
